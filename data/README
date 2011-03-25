@@ -1,0 +1,36 @@
+These folders contain the data files.
+
+work/
+  - where the collector writes all of its data to. It will
+    write to a file named collection.txt
+
+process/
+  - where the Mover will move collection.txt to when it is
+    awaiting processing.
+
+    1. When collection.txt > 100MB
+    2. When the timestamp of the first record is > 30minutes
+
+  - work/collection.txt will be moved to process/collection-{ts}.txt
+    where timestamp is the time when the file was moved.
+
+  - files in here will be bzip2 compressed and put into
+    the relocate/ directory.
+
+relocate/
+
+  - files here are ready to be relocated to amazon S3 for 
+    final storage.
+
+  - files will be renamed once again when moved to S3 to
+    collection-{start ts}-{end ts}-{machineId}.bz2
+
+  - {start ts}   - timestamp of first record in collection
+  - {end ts}     - timestamp of last record in collection
+  - {machine id} - my MAC address, for distributed collection
+
+trash/
+  - files are moved here after they've been copied to S3
+
+  - scheduled garbage collector will come by and delete
+    these files. 

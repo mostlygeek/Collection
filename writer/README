@@ -1,0 +1,11 @@
+Was for delayed writes w/ beanstalk but
+the overhead was actually quite high.
+
+Better to just have PHP write straight to the collection.txt
+file and use kernel based file locking to prevent concurrent
+writers crushing each other.
+
+It was almost 50% (pheanstalk) to 90% Socket_Beanstalk slower
+using beanstalk in the middle.
+
+For this use case, no beanstalk. PHP -> file is fastest.
